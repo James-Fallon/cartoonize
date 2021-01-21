@@ -8,7 +8,7 @@ from werkzeug.datastructures import FileStorage
 
 from cartoonize.api import app, IMAGE_DIR
 
-SAMPLE_IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'resources', 'winnie.jpg')
+SAMPLE_IMAGE_PATH = os.path.join(os.path.dirname(__file__), 'resources', 'the-mandalorian.jpg')
 
 
 class TestCartoonizeAPI(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestCartoonizeAPI(unittest.TestCase):
 
         test_image_file = FileStorage(
             stream=open(SAMPLE_IMAGE_PATH, "rb"),
-            filename="winnie.jpg"
+            filename="the-mandalorian.jpg"
         ),
 
         self.client.post(
@@ -44,15 +44,15 @@ class TestCartoonizeAPI(unittest.TestCase):
         )
 
         # assert that the file saved correctly in the upload folder
-        self.assertTrue(os.path.exists(os.path.join(IMAGE_DIR, 'winnie.jpg')))
+        self.assertTrue(os.path.exists(os.path.join(IMAGE_DIR, 'the-mandalorian.jpg')))
 
         # cleanup
-        os.remove(os.path.join(IMAGE_DIR, 'winnie.jpg'))
+        os.remove(os.path.join(IMAGE_DIR, 'the-mandalorian.jpg'))
 
     def test_post_image_invalid_file_type(self):
         invalid_image_file = FileStorage(
             stream=open(SAMPLE_IMAGE_PATH, "rb"),
-            filename="winnie.csv"
+            filename="the-mandalorian.csv"
         ),
 
         resp = self.client.post(
@@ -65,15 +65,15 @@ class TestCartoonizeAPI(unittest.TestCase):
 
         self.assertEqual(resp.status_code, 400)
         self.assertEqual(resp.json, {
-            'message': "File 'winnie.csv' is not a valid image file."
+            'message': "File 'the-mandalorian.csv' is not a valid image file."
         })
 
     def test_get_image(self):
         # Manually move our test image to the upload folder
-        copyfile(SAMPLE_IMAGE_PATH, os.path.join(IMAGE_DIR, 'winnie.jpg'))
+        copyfile(SAMPLE_IMAGE_PATH, os.path.join(IMAGE_DIR, 'the-mandalorian.jpg'))
 
         fake_image_list = {
-            "123": "winnie.jpg"
+            "123": "the-mandalorian.jpg"
         }
 
         with mock.patch.dict('cartoonize.image.IMAGES', fake_image_list):
@@ -83,4 +83,22 @@ class TestCartoonizeAPI(unittest.TestCase):
         self.assertEqual(resp.mimetype, 'image/jpeg')
 
         # cleanup
-        os.remove(os.path.join(IMAGE_DIR, 'winnie.jpg'))
+        os.remove(os.path.join(IMAGE_DIR, 'the-mandalorian.jpg'))
+
+    def test_cartoonize(self):
+        # Manually move our test image to the upload folder
+        copyfile(SAMPLE_IMAGE_PATH, os.path.join(IMAGE_DIR, 'the-mandalorian.jpg'))
+
+        fake_image_list = {
+            "123": "the-mandalorian.jpg"
+        }
+
+        with mock.patch.dict('cartoonize.image.IMAGES', fake_image_list):
+            resp = self.client.get('/images/123/cartoonize')
+
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.mimetype, 'image/jpeg')
+
+        # cleanup
+        os.remove(os.path.join(IMAGE_DIR, 'the-mandalorian.jpg'))
+        os.remove(os.path.join(IMAGE_DIR, 'the-mandalorian_cartoonified.jpg'))

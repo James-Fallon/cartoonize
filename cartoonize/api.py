@@ -14,7 +14,7 @@ api = Api(app)
 
 api.add_resource(ImageList, '/images', resource_class_kwargs={'image_folder': IMAGE_DIR})
 api.add_resource(Image, '/images/<image_id>', resource_class_kwargs={'image_folder': IMAGE_DIR})
-api.add_resource(Cartoonize, '/images/<image_id>/cartoonize')
+api.add_resource(Cartoonize, '/images/<image_id>/cartoonize', resource_class_kwargs={'image_folder': IMAGE_DIR})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
