@@ -11,6 +11,10 @@ RUN pip install -r requirements.txt
 COPY cartoonize/ /code/cartoonize
 COPY setup.py /code/
 
+# Open CV requires some additional linux packages
+RUN apt-get update
+RUN apt-get install ffmpeg libsm6 libxext6  -y
+
 # Install our cartoonize package
 RUN python setup.py install
 
