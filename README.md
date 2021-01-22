@@ -30,18 +30,23 @@ This is a Flask API which allows users to upload, download and 'cartoonize' imag
 Returns the list of images currently stored on the server.
 
     curl http://0.0.0.0:5000/images
+
+---
     
+`POST /images` 
 
 Upload an image.
 
     curl -v -F "image=@/Users/jamesfallon/Pictures/some-photo.jpg" http://0.0.0.0:5000/images
 
+---
 `GET /images/<image_id>` 
 
 Download the image with id <image_id>.
 
     curl http://0.0.0.0:5000/images/<image_id> --output ./image.jpg
 
+---
 `GET /images/<image_id>/cartoonize` 
 
 Download a cartoonified version of an image.
