@@ -16,7 +16,8 @@ RUN python setup.py install
 
 # Set directory for image uploads
 ENV CARTOONIZE_IMAGE_DIR=/images
+RUN mkdir /images
 
 # Run the flask app
 ENTRYPOINT ["python"]
-CMD ["cartoonize/api.py"]
+CMD ["cartoonize/app.py"]
