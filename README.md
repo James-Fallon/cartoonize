@@ -8,6 +8,11 @@ This is a Flask API which allows users to upload, download and 'cartoonize' imag
 
 ### Option 1: Run it locally
 
+    # First create a folder for storing images & set env variable to its location
+    mkdir /cartoonize-images
+    export CARTOONIZE_IMAGE_DIR=/cartoonize-images
+    
+    # Now we can install & run
     pip install -r requirements.txt
     python setup.py install
     python cartoonize/app.py
